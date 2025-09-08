@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
   // Initialize Firebase authentication and navigation
-  const auth = getAuth();
+  const { login, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
 
   // State variables for managing authentication state, email, password, and error messages
@@ -14,37 +14,32 @@ const Login = () => {
   const [error, setError] = useState('');
 
   // Function to handle sign-in with Google
-  const signInWithGoogle = async () => {
+  const handleGoogleLogin = async () => {
     setAuthing(true);
-
-    // Use Firebase to sign in with Google
-    signInWithPopup(auth, new GoogleAuthProvider())
-      .then(response => {
-        console.log(response.user.uid);
-        navigate('/');
-      })
-      .catch(error => {
-        console.log(error);
-        setAuthing(false);
-      });
+    try {
+      await loginWithGoogle();
+      navigate('/');
+    } catch (err: any) {
+      console.error(err);
+      setError(err.message);
+    } finally {
+      setAuthing(false);
+    }
   }
 
   // Function to handle sign-in with email and password
-  const signInWithEmail = async () => {
+  const handleEmailLogin = async () => {
     setAuthing(true);
     setError('');
-
-    // Use Firebase to sign in with email and password
-    signInWithEmailAndPassword(auth, email, password)
-      .then(response => {
-        console.log(response.user.uid);
-        navigate('/');
-      })
-      .catch(error => {
-        console.log(error);
-        setError(error.message);
-        setAuthing(false);
-      });
+    try {
+      await login(email, password);
+      navigate('/');
+    } catch (err: any) {
+      console.error(err);
+      setError(err.message);
+    } finally {
+      setAuthing(false);
+    }
   }
 
   return (
@@ -82,7 +77,7 @@ const Login = () => {
           <div className='w-full flex flex-col mb-4'>
             <button
               className='w-full bg-transparent border border-white text-white my-2 font-semibold rounded-md p-4 text-center flex items-center justify-center cursor-pointer'
-              onClick={signInWithEmail}
+              onClick={handleEmailLogin}
               disabled={authing}>
               Log In With Email and Password
             </button>
@@ -100,7 +95,7 @@ const Login = () => {
           {/* Button to log in with Google */}
           <button
             className='w-full bg-white text-black font-semibold rounded-md p-4 text-center flex items-center justify-center cursor-pointer mt-7'
-            onClick={signInWithGoogle}
+            onClick={handleGoogleLogin}
             disabled={authing}>
             Log In With Google
           </button>

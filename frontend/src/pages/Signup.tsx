@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const Signup = () => {
   // Initialize Firebase authentication and navigation
-  const auth = getAuth();
+  const { signup, signupWithGoogle } = useAuth();
   const navigate = useNavigate();
 
   // State variables for managing authentication state, email, password, confirm password, and error messages
@@ -15,23 +15,21 @@ const Signup = () => {
   const [error, setError] = useState('');
 
   // Function to handle sign-up with Google
-  const signUpWithGoogle = async () => {
+  const handleGoogleSignup = async () => {
     setAuthing(true);
-
-    // Use Firebase to sign up with Google
-    signInWithPopup(auth, new GoogleAuthProvider())
-      .then(response => {
-        console.log(response.user.uid);
-        navigate('/');
-      })
-      .catch(error => {
-        console.log(error);
-        setAuthing(false);
-      });
+    try {
+      await signupWithGoogle();
+      navigate('/');
+    } catch (err: any) {
+      console.error(err);
+      setError(err.message);
+    } finally {
+      setAuthing(false);
+    }
   };
 
   // Function to handle sign-up with email and password
-  const signUpWithEmail = async () => {
+  const handleEmailSignup = async () => {
     // Check if passwords match
     if (password !== confirmPassword) {
       setError('Passwords do not match');
@@ -41,17 +39,15 @@ const Signup = () => {
     setAuthing(true);
     setError('');
 
-    // Use Firebase to create a new user with email and password
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(response => {
-        console.log(response.user.uid);
-        navigate('/');
-      })
-      .catch(error => {
-        console.log(error);
-        setError(error.message);
-        setAuthing(false);
-      });
+    try {
+      await signup(email, password);
+      navigate('/');
+    } catch (err: any) {
+      console.error(err);
+      setError(err.message);
+    } finally {
+      setAuthing(false);
+    }
   };
 
   return (
@@ -100,7 +96,7 @@ const Signup = () => {
           {/* Button to sign up with email and password */}
           <div className='w-full flex flex-col mb-4'>
             <button
-              onClick={signUpWithEmail}
+              onClick={handleEmailSignup}
               disabled={authing}
               className='w-full bg-transparent border border-white text-white my-2 font-semibold rounded-md p-4 text-center flex items-center justify-center cursor-pointer'>
               Sign Up With Email and Password
@@ -115,7 +111,7 @@ const Signup = () => {
 
           {/* Button to sign up with Google */}
           <button
-            onClick={signUpWithGoogle}
+            onClick={handleGoogleSignup}
             disabled={authing}
             className='w-full bg-white text-black font-semibold rounded-md p-4 text-center flex items-center justify-center cursor-pointer mt-7'>
             Sign Up With Google
