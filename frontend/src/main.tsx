@@ -5,6 +5,7 @@ import Subscriptions from './pages/Subscriptions';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Navbar from './components/Navbar';
+import Calendar from './pages/Calendar';
 
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router';
 import AuthRoute from './components/AuthRoute';
@@ -24,6 +25,8 @@ root.render(
           <Routes>
             <Route path="/" element={<AuthRoute><Subscriptions /></AuthRoute>} />
             <Route path="*" element={<Navigate to="/" />} />
+            <Route path="/calendar" element={<AuthRoute><Calendar /></AuthRoute>} />
+            <Route path="/subscriptions" element={<AuthRoute><Subscriptions /></AuthRoute>} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
           </Routes>
