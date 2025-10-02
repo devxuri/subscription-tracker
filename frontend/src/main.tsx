@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './tailwind.css';
-import Dashboard from './pages/Dashboard';
+import Subscriptions from './pages/Subscriptions';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import Navbar from './components/Navbar';
 
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router';
 import AuthRoute from './components/AuthRoute';
@@ -18,12 +19,15 @@ root.render(
   <React.StrictMode>
     <AuthProvider>
       <Router>
-        <Routes>
-          <Route path="/" element={<AuthRoute><Dashboard /></AuthRoute>} />
-          <Route path="*" element={<Navigate to="/" />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-        </Routes>
+        <Navbar />
+        <div className='max-w-screen-2xl mx-auto'>
+          <Routes>
+            <Route path="/" element={<AuthRoute><Subscriptions /></AuthRoute>} />
+            <Route path="*" element={<Navigate to="/" />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+          </Routes>
+        </div>
       </Router>
     </AuthProvider>
 
