@@ -34,7 +34,6 @@ const Navbar = () => {
                             >
                                 Logout
                             </button>
-
                         )}
                     </div>
                 </div>
@@ -52,6 +51,9 @@ const Navbar = () => {
                                 </li>
                                 <li>
                                     <a href="/analytics" className="text-gray-900 dark:text-white hover:underline">Analytics</a>
+                                </li>
+                                <li>
+                                    <a href="/integrations" className="text-gray-900 dark:text-white hover:underline">Integrations</a>
                                 </li>
                             </ul>
                         </div>
