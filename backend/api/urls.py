@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import create_user, get_users, user_detail, FirebaseTestView
+from api.views.views import create_user, get_users, user_detail, FirebaseTestView
 
 urlpatterns = [
     path('users/', get_users, name='get_users'),
