@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 
 const Navbar = () => {
-    const { user, logout } = useAuth();
+    const { user, logout, getIdToken } = useAuth(); // Access getIdToken from context
     const handleLogout = async () => {
         try {
             await logout();
@@ -10,6 +10,12 @@ const Navbar = () => {
             console.error("Failed to logout:", err);
         }
     };
+
+    useEffect(() => {
+        getIdToken?.().then(token => {
+            if (token) console.log("ID Token:", token); // For backend debugging purposes
+        });
+    }, [getIdToken]);
 
     return (
         <header>

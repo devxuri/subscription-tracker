@@ -1,11 +1,15 @@
 from django.shortcuts import render
 from rest_framework.decorators import api_view
+from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from .models import User
 from .serializers import UserSerializer
 
+
 # Create your views here.
+
 @api_view(['GET'])
 def get_users(request):
     users = User.objects.all()
@@ -41,3 +45,16 @@ def user_detail(request, pk):
     elif request.method == 'DELETE':
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class FirebaseTestView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self,request):
+        print(request)
+        user = request.user
+        claims = request.auth
+        return Response({
+            "ok" : True,
+            "uid" : getattr(user, 'uid', None),
+            "claims" : claims,
+        })

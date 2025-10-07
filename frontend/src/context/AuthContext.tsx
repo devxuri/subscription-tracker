@@ -20,6 +20,7 @@ type AuthContextType = {
     resetPassword: (email: string) => Promise<void>;
     signupWithGoogle: () => Promise<void>;
     logout: () => Promise<void>;
+    getIdToken?: () => Promise<string | null>; // Temporary for api testing
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -61,9 +62,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         await signOut(auth);
     };
 
+    const getIdToken = async () => {
+        if (user) {
+            return await user.getIdToken(); // Temporary for api testing
+        }
+        return null;
+    }
+
     return (
         <AuthContext.Provider
-            value={{ user, loading, signup, login, loginWithGoogle, signupWithGoogle, resetPassword, logout }}
+            value={{ user, loading, signup, login, loginWithGoogle, signupWithGoogle, resetPassword, logout, getIdToken }}
         >
             {children}
         </AuthContext.Provider>
