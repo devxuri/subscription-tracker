@@ -1,101 +1,122 @@
-# Subscription Tracker Backend
+# Subscription Tracker
 
-This is the backend for the Subscription Tracker project, built with Django and Django REST Framework.
+A Django backend for tracking user subscriptions and categories, with Firebase authentication.
 
-## Features
-
-- User authentication and management
-- Subscription tracking API
-- SQLite database (default)
-- Ready for Docker deployment
-
-## Prerequisites
-
-- Python 3.10+
-- [pip](https://pip.pypa.io/en/stable/)
-- [virtualenv](https://virtualenv.pypa.io/en/latest/) (recommended)
-- Docker (optional, for containerized deployment)
-
-## Setup Instructions
-
-### 1. Clone the repository
-
-```sh
-git clone https://github.com/devxuri/subscription-tracker.git
-cd subscription-tracker/backend
-```
-
-### 2. Create and activate a virtual environment
-
-```sh
-python -m venv bndenv
-source bndenv/bin/activate
-```
-
-### 3. Install dependencies
-
-```sh
-pip install -r requirements.txt
-```
-
-### 4. Configure environment variables
-
-Copy `.env.example` to `.env` and update values as needed (or create `.env`):
-
-```
-SECRET_KEY=your_secret_key
-DEBUG=1
-DJANGO_ALLOWED_HOSTS=127.0.0.1,localhost
-```
-
-### 5. Apply database migrations
-
-```sh
-python manage.py migrate
-```
-
-### 6. Create a superuser (optional, for admin access)
-
-```sh
-python manage.py createsuperuser
-```
-
-### 7. Run the development server
-
-```sh
-python manage.py runserver
-```
-
-The API will be available at [http://127.0.0.1:8000/](http://127.0.0.1:8000/).
-
-## Running with Docker
-
-1. Build the Docker image:
-
-    ```sh
-    docker build -t subscription-backend .
-    ```
-
-2. Run the container:
-
-    ```sh
-    docker run -p 8000:8000 --env-file .env subscription-backend
-    ```
+---
 
 ## Project Structure
 
-- `backend/` - Django project settings and configuration
-- `api/` - Django app with models, views, serializers, and API routes
+```
+backend/
+│
+├── api/
+│   ├── admin.py
+│   ├── apps.py
+│   ├── firebase.py
+│   ├── urls.py
+│   ├── migrations/
+│   ├── models/
+│   │   ├── __init__.py
+│   │   ├── category.py
+│   │   ├── subscription.py
+│   │   └── user.py
+│   ├── serializers/
+│   │   └── serializers.py
+│   ├── services/
+│   ├── tests/
+│   │   └── tests.py
+│   └── views/
+│       └── views.py
+│
+├── backend/
+│   ├── settings.py
+│   ├── urls.py
+│   ├── wsgi.py
+│   └── asgi.py
+│
+├── db.sqlite3
+├── manage.py
+├── requirements.txt
+├── .env
+├── dockerfile
+└── .dockerignore
+```
 
-## Useful Commands
+---
 
-- Run tests:  
-  ```sh
-  python manage.py test
-  ```
-- Access Django admin:  
-  Visit `/admin` in your browser
+## Setup
+
+1. **Clone the repo and create a virtual environment:**
+    ```sh
+    python3 -m venv bndenv
+    source bndenv/bin/activate
+    ```
+
+2. **Install dependencies:**
+    ```sh
+    pip install -r requirements.txt
+    ```
+
+3. **Configure environment variables:**
+    - Copy `.env.example` to `.env` and fill in your settings (if applicable).
+
+4. **Apply migrations:**
+    ```sh
+    python manage.py makemigrations
+    python manage.py migrate
+    ```
+
+5. **Create a superuser (for Django admin):**
+    ```sh
+    python manage.py createsuperuser
+    ```
+
+6. **Run the development server:**
+    ```sh
+    python manage.py runserver
+    ```
+
+---
+
+## Usage
+
+- **Django Admin:**  
+  Visit [http://127.0.0.1:8000/admin/](http://127.0.0.1:8000/admin/) to manage users, subscriptions, and categories.
+
+- **API Endpoints:**  
+  Define and access your API endpoints in `api/views/views.py` and `api/urls.py`.
+
+---
+
+## Notes
+
+- **Models** are organized in `api/models/` for scalability.
+- **Serializers, views, and services** are modularized in their respective folders.
+- **Firebase authentication** logic is in `api/firebase.py`.
+- **Switching databases:**  
+  You can use SQLite for development and switch to PostgreSQL for production by updating `backend/settings.py`.
+
+---
+
+## Testing
+
+- Run tests with:
+    ```sh
+    python manage.py test
+    ```
+
+---
+
+## Docker
+
+- Build and run with Docker (if configured):
+    ```sh
+    docker build -t subscription-tracker .
+    docker run -p 8000:8000 subscription-tracker
+    ```
+
+---
 
 ## License
 
-See [LICENSE.txt](../LICENSE.txt) for details.
+MIT License
