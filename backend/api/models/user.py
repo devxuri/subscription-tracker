@@ -1,9 +1,10 @@
 from django.db import models
 
-# Create your models here.
 class User(models.Model):
-    age = models.IntegerField()
-    name = models.CharField(max_length=100)
+    user_id = models.AutoField(primary_key=True)
+    firebase_uid = models.CharField(max_length=128, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True) #  Created time when the user is created
+    updated_at = models.DateTimeField(auto_now=True)  # Updated time whenever the user is modified
 
     def __str__(self):
-        return self.name
+        return f"User({self.firebase_uid})"
