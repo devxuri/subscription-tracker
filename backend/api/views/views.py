@@ -46,7 +46,7 @@ def user_detail(request, pk):
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-class FirebaseTestView(APIView):
+class CurrentUserView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self,request):
@@ -55,6 +55,9 @@ class FirebaseTestView(APIView):
         claims = request.auth
         return Response({
             "ok" : True,
-            "uid" : getattr(user, 'uid', None),
-            "claims" : claims,
+            "user_id" : getattr(user, 'user_id', None),
+            "firebase_uid": getattr(user, 'firebase_uid', None),
+            "created_at": getattr(user, 'created_at', None),
+            "updated_at": getattr(user, 'updated_at', None),
+            "auth_details" : claims,
         })

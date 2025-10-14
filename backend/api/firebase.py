@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 import firebase_admin
 from firebase_admin import credentials, auth as firebase_auth, initialize_app
 from rest_framework import exceptions, authentication
+from api.models import User
 import os
 
 
@@ -11,17 +12,6 @@ FIREBASE_CREDENTIALS = os.getenv('FIREBASE_CREDENTIALS_PATH')
 if not firebase_admin._apps:
     cred = credentials.Certificate(FIREBASE_CREDENTIALS)
     firebase_admin.initialize_app(cred)
-
-class FirebaseMock:
-    def __init__(self, uid: str, claims: dict):
-        self.uid = uid
-        self.claims = claims
-
-    @property
-    def is_authenticated(self):
-        return True
-    def __str__(self):
-        return self.uid
 
 class FirebaseAuthentication(authentication.BaseAuthentication):
     def authenticate(self, request):
@@ -40,5 +30,7 @@ class FirebaseAuthentication(authentication.BaseAuthentication):
             raise exceptions.AuthenticationFailed(f'Invalid token: {str(e)}')
         
         uid = decoded_token.get('uid')
-        user = FirebaseMock(uid=uid, claims=decoded_token)
+        user, created = User.objects.get_or_create(firebase_uid=uid)     
+        decoded_token['created'] = created
+
         return (user, decoded_token)

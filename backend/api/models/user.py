@@ -8,3 +8,7 @@ class User(models.Model):
 
     def __str__(self):
         return f"User({self.firebase_uid})"
+
+    @property
+    def is_authenticated(self):
+        return True
