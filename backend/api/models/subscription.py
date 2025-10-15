@@ -32,7 +32,7 @@ class Subscription(models.Model):
     updated_at = models.DateTimeField(auto_now=True) # Updated time whenever the subscription is modified
 
     def __str__(self):
-        return f"{self.name} - {self.user_id.firebase_uid}"
+        return f"{self.name} - {self.user_id.user_id}"
 
 
 

@@ -7,7 +7,7 @@ class User(models.Model):
     updated_at = models.DateTimeField(auto_now=True)  # Updated time whenever the user is modified
 
     def __str__(self):
-        return f"User({self.firebase_uid})"
+        return f"User {self.user_id} - {self.firebase_uid}"
 
     @property
     def is_authenticated(self):
