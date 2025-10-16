@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { setDark, setLight, useSystemPreference } from '../services/colorPref';
 
 const Navbar = () => {
     const { user, logout, getIdToken } = useAuth(); // Access getIdToken from context
@@ -19,7 +20,7 @@ const Navbar = () => {
 
     return (
         <header>
-            <nav className="bg-white border-gray-200 dark:bg-gray-900">
+            <nav>
                 <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-2xl p-4">
                     <a href="/landing" className="flex items-center space-x-3 rtl:space-x-reverse">
                         <img src="./vite.svg" className="h-8" alt="Tracker logo" />
@@ -27,10 +28,10 @@ const Navbar = () => {
                     </a>
                     <p>{user ? `Welcome, ${user.email}!` : ""}</p>
                     <div className='flex items-center space-x-6'>
-                        <p className='text-sm font-normal text-gray-400'>
+                        <p className='text-sm font-normal'>
                             <a href='/signup'>Sign Up</a>
                         </p>
-                        <p className='text-sm font-normal text-gray-400'>
+                        <p className='text-sm font-normal'>
                             <a href='/login'>Log In</a>
                         </p>
                         {user && (
@@ -41,11 +42,16 @@ const Navbar = () => {
                                 Logout
                             </button>
                         )}
+                        <nav className="p-4">
+                            <button onClick={() => setDark()} className="mr-2">Dark</button>
+                            <button onClick={() => setLight()} className="mr-2">Light</button>
+                            <button onClick={() => useSystemPreference()}>System</button>
+                        </nav>
                     </div>
                 </div>
             </nav>
             {user && (
-                <nav className="bg-gray-50 dark:bg-gray-700">
+                <nav className="border-1 border-gray-400">
                     <div className="max-w-screen-2xl px-4 py-3 mx-auto">
                         <div className="flex items-center">
                             <ul className="flex flex-row font-medium mt-0 space-x-8 rtl:space-x-reverse text-sm">

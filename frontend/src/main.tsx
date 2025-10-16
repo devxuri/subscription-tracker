@@ -13,6 +13,7 @@ import Landing from './pages/Landing';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router';
 import AuthRoute from './components/AuthRoute';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { initThemeFromStorage } from './services/colorPref';
 
 const AppRoutes = () => {
   const { user } = useAuth();
@@ -38,6 +39,8 @@ const AppRoutes = () => {
     </Routes>
   );
 };
+
+initThemeFromStorage()
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

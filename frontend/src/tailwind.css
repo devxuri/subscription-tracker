@@ -1,1 +1,18 @@
 @import "tailwindcss";
+@tailwind utilities;
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+@layer base {
+
+    /* default (light) */
+    body {
+        @apply bg-white text-gray-900 min-h-screen;
+    }
+
+    /* dark mode: applies when .dark is present or data-theme=dark selector is used by your custom va0riant */
+    .dark body,
+    :where([data-theme="dark"]) body {
+        @apply bg-gray-800 text-white;
+
+    }
+}
